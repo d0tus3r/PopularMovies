@@ -6,77 +6,80 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import net.digitalswarm.popularmovies.models.Movie;
+
+import java.util.List;
 
 /**
  * Created by us3r on 5/5/2018.
  * Implements a recycler view & defines how content will be displayed
  */
 
-public class MoviePosterRecyclerView extends RecyclerView.Adapter<MoviePosterRecyclerView.ViewHolder> {
+public class MoviePosterRecyclerView extends RecyclerView.Adapter<MoviePosterRecyclerView.MoviePosterRVHolder> {
 
-    //create array of movie poster urls to feed to recycler view
-    private String[] mMoviePosterUrls = new String[0];
-    private LayoutInflater mInflater;
-    private ItemClickListener mMovieClickListener;
+    //create list of movie objects for movie poster thumbnail / name pulling
+    private List<Movie> moviePosterList;
+    private Context context;
 
-
-    //construct with moviePosterUrls
-    MoviePosterRecyclerView(Context context, String[] moviePosterData) {
-        this.mInflater = LayoutInflater.from(context);
-        this.mMoviePosterUrls = moviePosterData;
+    //constructor using movie list data
+    public MoviePosterRecyclerView(Context context, List<Movie> movieList) {
+        this.moviePosterList = movieList;
+        this.context = context;
     }
 
+    //customized rv view holder with our layout inflated
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.recyclerview_grid, parent, false);
-        return new RecyclerView.ViewHolder(view);
+    public MoviePosterRVHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.movie_poster_list, null);
+        MoviePosterRVHolder mpVH = new MoviePosterRVHolder(layoutView);
+        return mpVH;
     }
 
+    //grab data from moviePosterList and bind to view
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-
+    public void onBindViewHolder(MoviePosterRVHolder mpHolder, int position) {
+        //TODO: fix imageResource call with json queried image url
+        mpHolder.moviePosterThumbnailIV.setImageResource(moviePosterList.get(position).getThumbnailUrl());
+        mpHolder.movieNameTV.setText(moviePosterList.get(position).getOgName());
     }
 
+    //override getItemCount with movie poster list size
     @Override
     public int getItemCount() {
-        return 0;
+        return this.moviePosterList.size();
     }
 
 
-    //view holder for recycled views
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.onClickListener {
 
-        TextView movieTextView;
+    /**
+     * MoviePosterRVHolder - references movie poster layout and adds on OnClickListener to
+     *      transition to movie details activity.
+     */
 
-        ViewHolder(View itemView) {
+    public class MoviePosterRVHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        //create textview and imageview
+        public ImageView moviePosterThumbnailIV;
+        public TextView movieNameTV;
+
+        //view holder constructor
+        public MoviePosterRVHolder(View itemView) {
             super(itemView);
-            movieTextView = (TextView) itemView.findViewById(R.id.movie_name);
             itemView.setOnClickListener(this);
+            moviePosterThumbnailIV = (ImageView) itemView.findViewById(R.id.movie_poster_thumbnail_iv);
+            movieNameTV = (TextView) itemView.findViewById(R.id.moviePosterName_textView);
         }
 
-
+        //TODO: implement on click method to transition to detail_activity using intents
         @Override
         public void onClick(View view) {
-            if (mMovieClickListener) != null) {
-                mMovieClickListener.onItemClick(view, getAdapterPosition());
-            }
+            //Will send intention to detail_activity
         }
 
 
     }
-
-    String getItem(int id) {
-        return mMoviePosterUrls[id];
-    }
-
-    void setmMovieClickListener(ItemClickListener itemClickListener){
-        this.mMovieClickListener = itemClickListener;
-    }
-
-    public interface ItemClickListener {
-        void onItemClick(View view, int position);
-    }
-
 
 }

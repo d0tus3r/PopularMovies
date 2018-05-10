@@ -1,4 +1,4 @@
-package net.digitalswarm.popularmovies;
+package net.digitalswarm.popularmovies.models;
 
 /**
  * Created by us3r on 5/1/2018.
