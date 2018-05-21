@@ -1,12 +1,11 @@
 package net.digitalswarm.popularmovies.utils;
 
 import android.net.Uri;
-
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Scanner;
 
 /**
@@ -20,9 +19,7 @@ public class NetUtils {
     public static final String TMDB_MOVIE_BASE_URL = "api.themoviedb.org/3/movie";
     public static final String POPULAR_MOVIES = "popular";
     public static final String TOPRATED_MOVIES = "top_rated";
-    //url strings for movie image
-    public static final String TMDB_IMAGE_BASE_URL = "http://image.tmdb.org/t/p";
-    public static final String TMDB_IMAGE_SIZE = "w185/";
+
     //api key builder
     //Todo: Obfuscate key by hiding in config file not indexed by git [stretch goal]
     public static final String API_KEY = "";
@@ -75,7 +72,7 @@ public class NetUtils {
      * @throws IOException
      * Shout out to NetworkUtils from Toybox/Sunshine project
      */
-    public static String getMoveData(URL url) throws IOException {
+    public static String getMovieData(URL url) throws IOException {
         HttpURLConnection urlCon = (HttpURLConnection) url.openConnection();
         try {
             InputStream movieInput = urlCon.getInputStream();
