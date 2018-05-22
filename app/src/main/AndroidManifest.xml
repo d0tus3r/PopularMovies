@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.digitalswarm.popularmovies">
 
+    <!--internet permission required to pull movie data from tmdb api-->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
