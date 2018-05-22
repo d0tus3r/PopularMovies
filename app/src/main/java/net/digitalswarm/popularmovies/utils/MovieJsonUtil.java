@@ -6,6 +6,8 @@ package net.digitalswarm.popularmovies.utils;
  */
 
 //import movie object for populating grid view
+import android.util.Log;
+
 import net.digitalswarm.popularmovies.models.Movie;
 //import arraylist for movie objects
 import java.util.ArrayList;
@@ -13,6 +15,8 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import static android.content.ContentValues.TAG;
 
 
 public class MovieJsonUtil {
@@ -37,7 +41,9 @@ public class MovieJsonUtil {
         //loop through movieResultsJson and return an array of movie objects
         for (int i = 0; i < movieResultsJson.length(); i++){
             JSONObject resultEntry = movieResultsJson.getJSONObject(i);
-            movieArrayList.set(i, new Movie(
+            //todo: remove log msg
+            Log.d(TAG, "getMovieResults: " + resultEntry);
+            movieArrayList.add(i, new Movie(
                     resultEntry.getString(TMDB_TITLE),
                     resultEntry.getString(TMDB_POSTER_URL),
                     resultEntry.getString(TMDB_RELEASE),

@@ -23,7 +23,7 @@
                 android:contentDescription="movie thumbnail" />
 
             <TextView
-                android:id="@+id/moviePosterName_textView"
+                android:id="@+id/movie_poster_name_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:text="moviePosterName_textView"/>

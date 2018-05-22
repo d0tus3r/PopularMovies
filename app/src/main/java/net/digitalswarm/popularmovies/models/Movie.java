@@ -7,15 +7,15 @@ package net.digitalswarm.popularmovies.models;
 public class Movie {
     //basic Strings for movie data
     String ogName;
-    String thumbnailUrl;
+    String posterUrl;
     String releaseDate;
     String userRating;
     String plotSynopsis;
 
     //default constructor
-    public Movie(String ogName, String thumbnailUrl, String releaseDate, String userRating, String plotSynopsis) {
+    public Movie(String ogName, String posterUrl, String releaseDate, String userRating, String plotSynopsis) {
         this.ogName = ogName;
-        this.thumbnailUrl = thumbnailUrl;
+        this.posterUrl = posterUrl;
         this.releaseDate = releaseDate;
         this.userRating = userRating;
         this.plotSynopsis = plotSynopsis;
@@ -29,12 +29,12 @@ public class Movie {
         this.ogName = ogName;
     }
 
-    public String getThumbnailUrl() {
-        return thumbnailUrl;
+    public String getPosterUrl() {
+        return posterUrl;
     }
 
-    public void setThumbnailUrl(String thumbnailUrl) {
-        this.thumbnailUrl = thumbnailUrl;
+    public void setPosterUrl(String posterUrl) {
+        this.posterUrl = posterUrl;
     }
 
     public String getReleaseDate() {

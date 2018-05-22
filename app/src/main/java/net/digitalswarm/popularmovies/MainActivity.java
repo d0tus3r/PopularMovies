@@ -24,8 +24,9 @@ public class MainActivity extends AppCompatActivity {
 
     //init grid layout manager for main layout
     private GridLayoutManager gridLayout;
-    private List<Movie> moviePosterList;
-    private ArrayList<Movie> movieArrayList;
+    private ArrayList<Movie> moviePosterList;
+    //private List<Movie> moviePosterList;
+    private MoviePosterRVAdapter mprvAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,18 +35,22 @@ public class MainActivity extends AppCompatActivity {
 
 
         //set gridlayout to have 2 columns
-        gridLayout = new GridLayoutManager(MainActivity.this, 2);
+        gridLayout = new GridLayoutManager(this, 2);
 
         //init movie poster recycler view to recycler view in activity_main
-        RecyclerView mpRV = (RecyclerView) findViewById(R.id.recycler_view);
+        RecyclerView mpRV = findViewById(R.id.recycler_view);
+        moviePosterList = new ArrayList<>();
 
         //set layout manager for recycler view to grid layout with fixed size
         mpRV.setHasFixedSize(true);
         mpRV.setLayoutManager(gridLayout);
 
         //create new recycler view and set adapter to movieposterrecyclerview
-        MoviePosterRecyclerView mprvAdapter = new MoviePosterRecyclerView(MainActivity.this, moviePosterList);
+        mprvAdapter = new MoviePosterRVAdapter(this, moviePosterList);
         mpRV.setAdapter(mprvAdapter);
+
+        URL tmdb = NetUtils.genMovieUrl("popular");
+        new GetMovies().execute(tmdb);
 
 
 
@@ -70,21 +75,19 @@ public class MainActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
             return movieResults;
         }
         @Override
         protected void onPostExecute(String movieResults){
             //parse json and build array of movies for mp recycler view
-            if (movieResults != null) {
-
-                try {
-                    movieArrayList = MovieJsonUtil.getMovieResults(movieResults);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
+            try {
+                moviePosterList = MovieJsonUtil.getMovieResults(movieResults);
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-
+            mprvAdapter.setmMovieList(moviePosterList);
+            mprvAdapter.notifyDataSetChanged();
         }
     }
 }

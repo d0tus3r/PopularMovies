@@ -13,7 +13,7 @@
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/movie_poster_thumbnail_iv"
+            android:id="@+id/movie_poster_iv"
             android:layout_width="match_parent"
             android:maxHeight="200dp"
             android:layout_height="wrap_content"

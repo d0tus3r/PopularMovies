@@ -1,12 +1,16 @@
 package net.digitalswarm.popularmovies.utils;
 
 import android.net.Uri;
+import android.util.Log;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.util.Scanner;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by us3r on 5/17/2018.
@@ -16,13 +20,13 @@ import java.util.Scanner;
 
 public class NetUtils {
     //url strings for movie data
-    public static final String TMDB_MOVIE_BASE_URL = "api.themoviedb.org/3/movie";
+    public static final String TMDB_MOVIE_BASE_URL = "api.themoviedb.org";
     public static final String POPULAR_MOVIES = "popular";
     public static final String TOPRATED_MOVIES = "top_rated";
 
     //api key builder
     //Todo: Obfuscate key by hiding in config file not indexed by git [stretch goal]
-    public static final String API_KEY = "";
+    public static final String API_KEY = "e47123810aa37b4363daffe05313ca4d";
 
 
     /**
@@ -38,11 +42,15 @@ public class NetUtils {
         if (sortPref == "popular") {
             builder.scheme("http")
                     .authority(TMDB_MOVIE_BASE_URL)
+                    .appendPath("3")
+                    .appendPath("movie")
                     .appendPath(POPULAR_MOVIES)
                     .appendQueryParameter("api_key", API_KEY);
 
             try {
                 url = new URL(builder.build().toString());
+                //temp log to troubleshoot crash :( TODO: remove log
+                Log.d(TAG, "genMovieUrl: " + url);
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
@@ -81,6 +89,7 @@ public class NetUtils {
 
             boolean hasInput = scanner.hasNext();
             if (hasInput) {
+                Log.d(TAG, "getMovieData: Success");
                 return scanner.next();
             } else {
                 return null;
