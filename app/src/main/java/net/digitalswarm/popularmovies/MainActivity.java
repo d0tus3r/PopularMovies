@@ -1,5 +1,7 @@
 package net.digitalswarm.popularmovies;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,7 +18,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MoviePosterRVAdapter.MoviePosterRVAdapterOnClickHandler {
 
     //init grid layout manager for main layout
     private GridLayoutManager gridLayout;
@@ -44,6 +46,17 @@ public class MainActivity extends AppCompatActivity {
         URL tmdb = NetUtils.genMovieUrl("popular");
         //populate screen with get movies async task
         new GetMovies().execute(tmdb);
+    }
+
+    @Override
+    public void onClick(Movie movie){
+        //assign context and activity class for scope
+        Context context = this;
+        Class destinationClass = DetailActivity.class;
+        //create a new intent to launch detail activity
+        Intent detailActivityIntent = new Intent(context, destinationClass);
+        detailActivityIntent.putExtra(Intent.MOVIE_PARCEL, movie);
+        startActivity(detailActivityIntent);
     }
 
     private class GetMovies extends AsyncTask<URL, Void, String> {

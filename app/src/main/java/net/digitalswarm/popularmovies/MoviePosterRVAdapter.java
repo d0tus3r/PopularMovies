@@ -22,26 +22,26 @@ import static android.content.ContentValues.TAG;
  * Created by us3r on 5/5/2018.
  * Used to bind views and movie poster data
  */
-//TODO: Finish implementing onclick listeners and onclick actions
 public class MoviePosterRVAdapter extends RecyclerView.Adapter<MoviePosterRVAdapter.PosterViewHolder> {
 
     //List of Movie Objects to Fill Recycler View
     private ArrayList<Movie> mMovieList;
     private Context mContext;
     private static String TMDB_IMAGE_URL = "http://image.tmdb.org/t/p/w185/";
-    //private final MoviePosterRVAdapterOnClickHandler mClickHandler;
+    private MoviePosterRVAdapterOnClickHandler mClickHandler;
 
 
     public interface MoviePosterRVAdapterOnClickHandler {
-        void onClick(String Movie);
+        void onClick(Movie movie);
     }
-
+    //TODO: finish fixing constructor
     public MoviePosterRVAdapter(MoviePosterRVAdapterOnClickHandler clickHandler) {
-       // mClickHandler = clickHandler;
+        mClickHandler = clickHandler;
     }
 
     public class PosterViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
         public ImageView posterImgView;
+
         //view holder constructor
         public PosterViewHolder(View view){
             super(view);
@@ -50,9 +50,12 @@ public class MoviePosterRVAdapter extends RecyclerView.Adapter<MoviePosterRVAdap
             view.setOnClickListener(this);
         }
 
+        //implement click handler to current movie view
         @Override
         public void onClick(View view){
             int adapterPos = getAdapterPosition();
+            Movie currentMovie = mMovieList.get(adapterPos);
+            mClickHandler.onClick(currentMovie);
         }
     }
     //Adapter Constructor

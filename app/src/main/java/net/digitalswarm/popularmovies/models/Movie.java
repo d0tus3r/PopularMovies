@@ -1,10 +1,14 @@
 package net.digitalswarm.popularmovies.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by us3r on 5/1/2018.
+ * TODO: Finish writing parcelable methods and add a CREATOR field MOVIE_PARCEL
  */
 
-public class Movie {
+public class Movie implements Parcelable{
     //basic Strings for movie data
     String ogName;
     String posterUrl;
@@ -62,5 +66,13 @@ public class Movie {
     }
 
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
 
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+
+    }
 }
