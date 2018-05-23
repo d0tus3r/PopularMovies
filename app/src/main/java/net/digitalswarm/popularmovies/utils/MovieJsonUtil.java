@@ -4,25 +4,19 @@ package net.digitalswarm.popularmovies.utils;
  * Created by us3r on 5/17/2018.
  * parse tmdb movie JSON and build list of movie objects for movie poster recycler view
  */
-
-//import movie object for populating grid view
 import android.util.Log;
-
 import net.digitalswarm.popularmovies.models.Movie;
-//import arraylist for movie objects
 import java.util.ArrayList;
-//import json
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
+//used for logging purposes
 import static android.content.ContentValues.TAG;
 
-
 public class MovieJsonUtil {
-
     //TMDB Keys for parsing JSON
     //results json is an array of movies
+    //json pagination with
     private static final String TMDB_RESULTS = "results";
     private static final String TMDB_POSTER_URL = "poster_path";
     private static final String TMDB_TITLE = "original_title";

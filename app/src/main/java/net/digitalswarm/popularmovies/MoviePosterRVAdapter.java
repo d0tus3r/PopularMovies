@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.view.View.OnClickListener;
 
 import com.squareup.picasso.Picasso;
 
@@ -22,23 +22,37 @@ import static android.content.ContentValues.TAG;
  * Created by us3r on 5/5/2018.
  * Used to bind views and movie poster data
  */
-
+//TODO: Finish implementing onclick listeners and onclick actions
 public class MoviePosterRVAdapter extends RecyclerView.Adapter<MoviePosterRVAdapter.PosterViewHolder> {
 
     //List of Movie Objects to Fill Recycler View
     private ArrayList<Movie> mMovieList;
     private Context mContext;
     private static String TMDB_IMAGE_URL = "http://image.tmdb.org/t/p/w185/";
+    //private final MoviePosterRVAdapterOnClickHandler mClickHandler;
 
-    public class PosterViewHolder extends RecyclerView.ViewHolder {
+
+    public interface MoviePosterRVAdapterOnClickHandler {
+        void onClick(String Movie);
+    }
+
+    public MoviePosterRVAdapter(MoviePosterRVAdapterOnClickHandler clickHandler) {
+       // mClickHandler = clickHandler;
+    }
+
+    public class PosterViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
         public ImageView posterImgView;
-        public TextView titleView;
         //view holder constructor
         public PosterViewHolder(View view){
             super(view);
             //assign views
             posterImgView = (ImageView) view.findViewById(R.id.moviePoster_imageView);
-            titleView = (TextView) view.findViewById(R.id.movie_poster_name_tv);
+            view.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view){
+            int adapterPos = getAdapterPosition();
         }
     }
     //Adapter Constructor
@@ -63,7 +77,6 @@ public class MoviePosterRVAdapter extends RecyclerView.Adapter<MoviePosterRVAdap
         Movie currentMovie = mMovieList.get(position);
         Log.d(TAG, "onBindViewHolder: " + currentMovie.getPosterUrl());
         //bind data from movie to views to the poster view holder
-        posterHolder.titleView.setText(currentMovie.getOgName());
         Picasso.with(mContext)
             .load((TMDB_IMAGE_URL + currentMovie.getPosterUrl()))
             .into(posterHolder.posterImgView);

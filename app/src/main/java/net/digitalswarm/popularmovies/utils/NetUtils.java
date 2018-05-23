@@ -2,14 +2,12 @@ package net.digitalswarm.popularmovies.utils;
 
 import android.net.Uri;
 import android.util.Log;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.util.Scanner;
-
 import static android.content.ContentValues.TAG;
 
 /**
@@ -46,10 +44,9 @@ public class NetUtils {
                     .appendPath("movie")
                     .appendPath(POPULAR_MOVIES)
                     .appendQueryParameter("api_key", API_KEY);
-
             try {
                 url = new URL(builder.build().toString());
-                //temp log to troubleshoot crash :( TODO: remove log
+                //temp log to troubleshoot crash
                 Log.d(TAG, "genMovieUrl: " + url);
             } catch (MalformedURLException e) {
                 e.printStackTrace();
@@ -59,9 +56,10 @@ public class NetUtils {
         } else {
             builder.scheme("http")
                     .authority(TMDB_MOVIE_BASE_URL)
+                    .appendPath("3")
+                    .appendPath("movie")
                     .appendPath(TOPRATED_MOVIES)
                     .appendQueryParameter("api_key", API_KEY);
-
             try {
                 url = new URL(builder.build().toString());
             } catch (MalformedURLException e) {
@@ -70,7 +68,6 @@ public class NetUtils {
             return url;
         }
     }
-
     /**
      * open connection to tmdb using constructed url from genMovieUrl
      * read data (if avail) using scanner
@@ -86,7 +83,6 @@ public class NetUtils {
             InputStream movieInput = urlCon.getInputStream();
             Scanner scanner = new Scanner(movieInput);
             scanner.useDelimiter("\\A");
-
             boolean hasInput = scanner.hasNext();
             if (hasInput) {
                 Log.d(TAG, "getMovieData: Success");
