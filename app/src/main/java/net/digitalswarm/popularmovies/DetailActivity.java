@@ -20,12 +20,13 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
         //pull intent from main activity
         Intent intentFromMain = getIntent();
+        Movie currentMovie = intentFromMain.getParcelableExtra("Movie");
 
         if (intentFromMain != null) {
 
         }
 
-        displayMovieDetails(movie);
+        displayMovieDetails(currentMovie);
     }
 
 

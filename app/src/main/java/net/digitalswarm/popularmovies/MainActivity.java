@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements MoviePosterRVAdapter.MoviePosterRVAdapterOnClickHandler {
+public class MainActivity extends AppCompatActivity implements MoviePosterRVAdapter.MoviePosterRVAdapterClickListener {
 
     //init grid layout manager for main layout
     private GridLayoutManager gridLayout;
@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements MoviePosterRVAdap
         mpRV.setHasFixedSize(true);
         mpRV.setLayoutManager(gridLayout);
         //create new recycler view and set adapter to movieposterrecyclerview
-        mprvAdapter = new MoviePosterRVAdapter(this, moviePosterList);
+        mprvAdapter = new MoviePosterRVAdapter(this, moviePosterList, this);
         mpRV.setAdapter(mprvAdapter);
         //generate url with sortPref popular by default : v2 maybe save state
         URL tmdb = NetUtils.genMovieUrl("popular");
@@ -49,13 +49,13 @@ public class MainActivity extends AppCompatActivity implements MoviePosterRVAdap
     }
 
     @Override
-    public void onClick(Movie movie){
+    public void onClick(int position){
         //assign context and activity class for scope
         Context context = this;
         Class destinationClass = DetailActivity.class;
-        //create a new intent to launch detail activity
+        //create a new intent to launch detail activity, using current moviePosterList position
         Intent detailActivityIntent = new Intent(context, destinationClass);
-        detailActivityIntent.putExtra(Intent.MOVIE_PARCEL, movie);
+        detailActivityIntent.putExtra("Movie", moviePosterList.get(position));
         startActivity(detailActivityIntent);
     }
 

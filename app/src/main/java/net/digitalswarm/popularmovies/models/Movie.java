@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 /**
  * Created by us3r on 5/1/2018.
- * TODO: Finish writing parcelable methods and add a CREATOR field MOVIE_PARCEL
+ * Describes a movie object that will be created from JSON data from TMDB api
  */
 
 public class Movie implements Parcelable{
@@ -24,6 +24,27 @@ public class Movie implements Parcelable{
         this.userRating = userRating;
         this.plotSynopsis = plotSynopsis;
     }
+    //parcel version constructor
+    public Movie(Parcel parcel){
+        this.ogName = parcel.readString();
+        this.posterUrl = parcel.readString();
+        this.releaseDate = parcel.readString();
+        this.userRating = parcel.readString();
+        this.plotSynopsis = parcel.readString();
+    }
+    //movie object creator from parcel
+    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel in) {
+            return new Movie(in);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
+
     //getters and setters
     public String getOgName() {
         return ogName;
@@ -71,8 +92,13 @@ public class Movie implements Parcelable{
         return 0;
     }
 
+    //package object for parcel
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-
+        parcel.writeString(this.getOgName());
+        parcel.writeString(this.getPosterUrl());
+        parcel.writeString(this.getReleaseDate());
+        parcel.writeString(this.getUserRating());
+        parcel.writeString(this.getPlotSynopsis());
     }
 }

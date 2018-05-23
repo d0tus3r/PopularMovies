@@ -9,13 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.view.View.OnClickListener;
-
 import com.squareup.picasso.Picasso;
-
 import net.digitalswarm.popularmovies.models.Movie;
-
 import java.util.ArrayList;
-
 import static android.content.ContentValues.TAG;
 
 /**
@@ -28,15 +24,11 @@ public class MoviePosterRVAdapter extends RecyclerView.Adapter<MoviePosterRVAdap
     private ArrayList<Movie> mMovieList;
     private Context mContext;
     private static String TMDB_IMAGE_URL = "http://image.tmdb.org/t/p/w185/";
-    private MoviePosterRVAdapterOnClickHandler mClickHandler;
+    private MoviePosterRVAdapterClickListener mClickListener;
 
 
-    public interface MoviePosterRVAdapterOnClickHandler {
-        void onClick(Movie movie);
-    }
-    //TODO: finish fixing constructor
-    public MoviePosterRVAdapter(MoviePosterRVAdapterOnClickHandler clickHandler) {
-        mClickHandler = clickHandler;
+    public interface MoviePosterRVAdapterClickListener {
+        void onClick(int pos);
     }
 
     public class PosterViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
@@ -54,14 +46,14 @@ public class MoviePosterRVAdapter extends RecyclerView.Adapter<MoviePosterRVAdap
         @Override
         public void onClick(View view){
             int adapterPos = getAdapterPosition();
-            Movie currentMovie = mMovieList.get(adapterPos);
-            mClickHandler.onClick(currentMovie);
+            mClickListener.onClick(adapterPos);
         }
     }
     //Adapter Constructor
-    public MoviePosterRVAdapter(Context mContext, ArrayList<Movie> mMovieList){
+    public MoviePosterRVAdapter(Context mContext, ArrayList<Movie> mMovieList, MoviePosterRVAdapterClickListener clickListener){
         this.mContext = mContext;
         this.mMovieList = mMovieList;
+        this.mClickListener = clickListener;
     }
 
     //inflate movie poster list layout and return view holder
