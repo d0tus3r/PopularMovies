@@ -20,19 +20,16 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements MoviePosterRVAdapter.MoviePosterRVAdapterClickListener {
 
-    //init grid layout manager for main layout
-    private GridLayoutManager gridLayout;
     private ArrayList<Movie> moviePosterList;
     //private List<Movie> moviePosterList;
     private MoviePosterRVAdapter mprvAdapter;
-    private String sortPref = "popular";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //set gridlayout to have 2 columns
-        gridLayout = new GridLayoutManager(this, 2);
+        GridLayoutManager gridLayout = new GridLayoutManager(this, 2);
         //init movie poster recycler view to recycler view in activity_main
         RecyclerView mpRV = findViewById(R.id.recycler_view);
         moviePosterList = new ArrayList<>();
@@ -111,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements MoviePosterRVAdap
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        String sortPref = "popular";
         if (item.getItemId() == R.id.sort_popular) {
             sortPref = "popular";
             URL tmdb = NetUtils.genMovieUrl(sortPref);

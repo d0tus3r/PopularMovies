@@ -18,13 +18,13 @@ import static android.content.ContentValues.TAG;
 
 public class NetUtils {
     //url strings for movie data
-    public static final String TMDB_MOVIE_BASE_URL = "api.themoviedb.org";
-    public static final String POPULAR_MOVIES = "popular";
-    public static final String TOPRATED_MOVIES = "top_rated";
+    private static final String TMDB_MOVIE_BASE_URL = "api.themoviedb.org";
+    private static final String POPULAR_MOVIES = "popular";
+    private static final String TOPRATED_MOVIES = "top_rated";
 
     //api key builder
     //Todo: Obfuscate key by hiding in config file not indexed by git [stretch goal]
-    public static final String API_KEY = "e47123810aa37b4363daffe05313ca4d";
+    private static final String API_KEY = "e47123810aa37b4363daffe05313ca4d";
 
 
     /**

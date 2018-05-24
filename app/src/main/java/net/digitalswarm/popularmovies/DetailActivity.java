@@ -21,11 +21,6 @@ public class DetailActivity extends AppCompatActivity {
         //pull intent from main activity
         Intent intentFromMain = getIntent();
         Movie currentMovie = intentFromMain.getParcelableExtra("Movie");
-
-        if (intentFromMain != null) {
-
-        }
-
         displayMovieDetails(currentMovie);
     }
 

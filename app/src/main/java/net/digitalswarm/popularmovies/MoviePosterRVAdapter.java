@@ -22,9 +22,8 @@ public class MoviePosterRVAdapter extends RecyclerView.Adapter<MoviePosterRVAdap
 
     //List of Movie Objects to Fill Recycler View
     private ArrayList<Movie> mMovieList;
-    private Context mContext;
-    private static String TMDB_IMAGE_URL = "http://image.tmdb.org/t/p/w185/";
-    private MoviePosterRVAdapterClickListener mClickListener;
+    private final Context mContext;
+    private final MoviePosterRVAdapterClickListener mClickListener;
 
 
     public interface MoviePosterRVAdapterClickListener {
@@ -32,13 +31,13 @@ public class MoviePosterRVAdapter extends RecyclerView.Adapter<MoviePosterRVAdap
     }
 
     public class PosterViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
-        public ImageView posterImgView;
+        final ImageView posterImgView;
 
         //view holder constructor
-        public PosterViewHolder(View view){
+        PosterViewHolder(View view){
             super(view);
             //assign views
-            posterImgView = (ImageView) view.findViewById(R.id.moviePoster_imageView);
+            posterImgView = view.findViewById(R.id.moviePoster_imageView);
             view.setOnClickListener(this);
         }
 
@@ -72,6 +71,7 @@ public class MoviePosterRVAdapter extends RecyclerView.Adapter<MoviePosterRVAdap
         Movie currentMovie = mMovieList.get(position);
         Log.d(TAG, "onBindViewHolder: " + currentMovie.getPosterUrl());
         //bind data from movie to views to the poster view holder
+        String TMDB_IMAGE_URL = "http://image.tmdb.org/t/p/w185/";
         Picasso.with(mContext)
             .load((TMDB_IMAGE_URL + currentMovie.getPosterUrl()))
             .into(posterHolder.posterImgView);
