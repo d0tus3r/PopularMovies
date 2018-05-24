@@ -10,6 +10,12 @@ import com.squareup.picasso.Picasso;
 
 import net.digitalswarm.popularmovies.models.Movie;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class DetailActivity extends AppCompatActivity {
 
     private static final String TMDB_IMAGE_URL = "http://image.tmdb.org/t/p/w185/";
@@ -34,11 +40,24 @@ public class DetailActivity extends AppCompatActivity {
         TextView ratingTv = findViewById(R.id.user_rating_tv);
         TextView plotOverTv = findViewById(R.id.plot_synop_tv);
 
+        //clean format of date to be more human readable
+        String releaseDate = movie.getReleaseDate();
+        DateFormat feedDate = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        DateFormat resultDate = new SimpleDateFormat("MMMM dd,  yyyy", Locale.US);
+        Date date = null;
+        try {
+            date = feedDate.parse(releaseDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        releaseDate = resultDate.format(date);
+
+
         Picasso.with(this)
                 .load((TMDB_IMAGE_URL + movie.getPosterUrl()))
                 .into(moviePosterIv);
         ogTitleTv.setText(movie.getOgName());
-        releaseTv.setText(movie.getReleaseDate());
+        releaseTv.setText(releaseDate);
         ratingTv.setText(movie.getUserRating());
         plotOverTv.setText(movie.getPlotSynopsis());
     }

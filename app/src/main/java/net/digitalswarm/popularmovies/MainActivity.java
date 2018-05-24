@@ -21,7 +21,6 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements MoviePosterRVAdapter.MoviePosterRVAdapterClickListener {
 
     private ArrayList<Movie> moviePosterList;
-    //private List<Movie> moviePosterList;
     private MoviePosterRVAdapter mprvAdapter;
 
     @Override
@@ -108,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements MoviePosterRVAdap
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        String sortPref = "popular";
+        String sortPref;
         if (item.getItemId() == R.id.sort_popular) {
             sortPref = "popular";
             URL tmdb = NetUtils.genMovieUrl(sortPref);

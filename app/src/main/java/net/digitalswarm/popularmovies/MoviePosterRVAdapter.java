@@ -25,7 +25,7 @@ public class MoviePosterRVAdapter extends RecyclerView.Adapter<MoviePosterRVAdap
     private final Context mContext;
     private final MoviePosterRVAdapterClickListener mClickListener;
 
-
+    //define an interface that we'll later implement
     public interface MoviePosterRVAdapterClickListener {
         void onClick(int pos);
     }

@@ -10,11 +10,11 @@ import android.os.Parcelable;
 
 public class Movie implements Parcelable{
     //basic Strings for movie data
-    private String ogName;
-    private String posterUrl;
-    private String releaseDate;
-    private String userRating;
-    private String plotSynopsis;
+    private final String ogName;
+    private final String posterUrl;
+    private final String releaseDate;
+    private final String userRating;
+    private final String plotSynopsis;
 
     //default constructor
     public Movie(String ogName, String posterUrl, String releaseDate, String userRating, String plotSynopsis) {

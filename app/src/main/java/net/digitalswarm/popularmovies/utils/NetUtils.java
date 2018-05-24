@@ -24,7 +24,7 @@ public class NetUtils {
 
     //api key builder
     //Todo: Obfuscate key by hiding in config file not indexed by git [stretch goal]
-    private static final String API_KEY = "e47123810aa37b4363daffe05313ca4d";
+    private static final String API_KEY = "";
 
 
     /**
@@ -37,7 +37,7 @@ public class NetUtils {
         Uri.Builder builder = new Uri.Builder();
         URL url = null;
         //popular url: http://api.themoviedb.org/3/movie/popular?api_key=API_KEY
-        if (sortPref == "popular") {
+        if (sortPref.equals("popular")) {
             builder.scheme("http")
                     .authority(TMDB_MOVIE_BASE_URL)
                     .appendPath("3")

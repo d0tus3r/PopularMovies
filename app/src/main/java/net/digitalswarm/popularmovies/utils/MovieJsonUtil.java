@@ -34,7 +34,6 @@ public class MovieJsonUtil {
         //loop through movieResultsJson and return an array of movie objects
         for (int i = 0; i < movieResultsJson.length(); i++){
             JSONObject resultEntry = movieResultsJson.getJSONObject(i);
-            //todo: remove log msg
             Log.d(TAG, "getMovieResults: " + resultEntry);
             movieArrayList.add(i, new Movie(
                     resultEntry.getString(TMDB_TITLE),
