@@ -9,9 +9,8 @@
         android:id="@+id/moviePoster_imageView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="8dp"
-        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
         android:contentDescription="@string/movie_poster_thumbnail" />
 
 </LinearLayout>

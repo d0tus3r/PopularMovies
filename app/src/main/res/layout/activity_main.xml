@@ -10,6 +10,6 @@
         android:layout_height="match_parent"
         tools:context="net.digitalswarm.popularmovies.MainActivity"
         android:id="@+id/recycler_view"
-        android:padding="16dp"/>
+        android:padding="8dp"/>
 
 </RelativeLayout>
