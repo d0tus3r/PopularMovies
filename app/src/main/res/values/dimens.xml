@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="basePadding">8dp</dimen>
+    <dimen name="movieHeaderPadding">14dp</dimen>
+    <dimen name="movieTitleSize">34sp</dimen>
+    <dimen name="movieHeaderSize">20sp</dimen>
+    <dimen name="movieBodySize">18sp</dimen>
+</resources>
