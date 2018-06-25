@@ -1,4 +1,4 @@
-package net.digitalswarm.popularmovies;
+package net.digitalswarm.popularmovies.adapters;
 
 
 import android.content.Context;
@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.view.View.OnClickListener;
 import com.squareup.picasso.Picasso;
+
+import net.digitalswarm.popularmovies.R;
 import net.digitalswarm.popularmovies.models.Movie;
 import java.util.ArrayList;
 import static android.content.ContentValues.TAG;

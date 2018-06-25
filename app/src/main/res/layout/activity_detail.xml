@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,80 +10,146 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/basePadding"
-        android:orientation="vertical">
+        android:background="@color/colorBg"
+        android:orientation="vertical"
+        android:padding="@dimen/basePadding">
 
         <ImageView
             android:id="@+id/movie_poster_iv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
-            android:scaleType="centerCrop"
-            android:contentDescription="@string/movie_poster_thumbnail"/>
+            android:background="@color/colorBg"
+            android:contentDescription="@string/movie_poster_thumbnail"
+            android:scaleType="centerCrop" />
 
         <TextView
             android:id="@+id/og_title_tv"
-            android:layout_height="wrap_content"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorBg"
             android:padding="@dimen/basePadding"
-            android:textStyle="bold"
+            android:textColor="@color/colorTitleText"
             android:textSize="@dimen/movieTitleSize"
-            tools:text="Original Title"/>
+            android:textStyle="bold"
+            tools:text="Original Title" />
 
         <TextView
+            android:id="@+id/release_date_title_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/colorBg"
+            android:paddingLeft="@dimen/basePadding"
             android:paddingTop="@dimen/basePadding"
-            android:paddingLeft="@dimen/basePadding"
-            android:textSize="@dimen/movieHeaderSize"
-            android:textStyle="bold"
             android:text="@string/release_date"
-            android:id="@+id/release_date_title_tv"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/release_date_tv"
-            android:paddingLeft="@dimen/basePadding"
-            android:textSize="@dimen/movieBodySize"
-            tools:text="Release Date"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="@dimen/movieHeaderPadding"
-            android:paddingLeft="@dimen/basePadding"
-            android:textStyle="bold"
+            android:textColor="@color/colorTitleText"
             android:textSize="@dimen/movieHeaderSize"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/release_date_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorBg"
+            android:paddingLeft="@dimen/basePadding"
+            android:textColor="@color/colorBodyText"
+            android:textSize="@dimen/movieBodySize"
+            tools:text="Release Date" />
+
+        <TextView
+            android:id="@+id/user_rating_title_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorBg"
+            android:paddingLeft="@dimen/basePadding"
+            android:paddingTop="@dimen/movieHeaderPadding"
             android:text="@string/user_rating"
-            android:id="@+id/user_rating_title_tv"/>
+            android:textColor="@color/colorTitleText"
+            android:textSize="@dimen/movieHeaderSize"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/user_rating_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/colorBg"
             android:paddingLeft="@dimen/basePadding"
+            android:textColor="@color/colorBodyText"
             android:textSize="@dimen/movieBodySize"
-            tools:text="User Rating"/>
+            tools:text="User Rating" />
 
         <TextView
+            android:id="@+id/plot_summary_title_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="@dimen/movieHeaderPadding"
+            android:background="@color/colorBg"
             android:paddingLeft="@dimen/basePadding"
-            android:textStyle="bold"
-            android:textSize="@dimen/movieHeaderSize"
+            android:paddingTop="@dimen/movieHeaderPadding"
             android:text="@string/plot_summary"
-            android:id="@+id/plot_summary_title_tv"/>
+            android:textColor="@color/colorTitleText"
+            android:textSize="@dimen/movieHeaderSize"
+            android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/plot_synop_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@color/colorBg"
+            android:paddingLeft="@dimen/basePadding"
+            android:textColor="@color/colorBodyText"
+            android:textSize="@dimen/movieBodySize"
+            tools:text="Plot Synopsis" />
+
+        <TextView
+            android:id="@+id/trailer_title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorBg"
+            android:paddingLeft="@dimen/basePadding"
+            android:paddingTop="@dimen/basePadding"
+            android:text="@string/trailers"
+            android:textColor="@color/colorTitleText"
+            android:textSize="@dimen/movieHeaderSize"
+            android:textStyle="bold" />
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorBg"
+            android:paddingBottom="@dimen/basePadding"
+            android:paddingRight="@dimen/basePadding"
+            android:paddingTop="@dimen/basePadding"
+            android:textColor="@color/colorTitleText">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/trailer_recycler_view"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="@dimen/basePadding"
+                android:paddingRight="@dimen/basePadding" />
+
+        </HorizontalScrollView>
+
+        <TextView
+            android:id="@+id/review_title_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorBg"
+            android:paddingLeft="@dimen/basePadding"
+            android:paddingTop="@dimen/basePadding"
+            android:text="@string/reviews"
+            android:textColor="@color/colorTitleText"
+            android:textSize="@dimen/movieHeaderSize"
+            android:textStyle="bold" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/review_recycler_view"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:paddingLeft="@dimen/basePadding"
-            android:textSize="@dimen/movieBodySize"
-            android:id="@+id/plot_synop_tv"
-            tools:text="Plot Synopsis"/>
+            android:paddingRight="@dimen/basePadding" />
 
     </LinearLayout>
-
 </ScrollView>
+
+

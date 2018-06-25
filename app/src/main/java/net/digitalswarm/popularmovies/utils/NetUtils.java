@@ -1,5 +1,8 @@
 package net.digitalswarm.popularmovies.utils;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.util.Log;
 import java.net.MalformedURLException;
@@ -25,6 +28,16 @@ public class NetUtils {
     //api key builder
     //Todo: Obfuscate key by hiding in config file not indexed by git [stretch goal]
     private static final String API_KEY = "";
+
+    //helper method for testing for internet access
+    public static boolean internetAccess(Context context) {
+        //init connectivity manager
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        //using the connectivity manager, poll active network info and save to networkInfo
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        //check if networkInfo is null && connection state
+        return networkInfo != null && networkInfo.isConnected();
+    }
 
 
     /**
@@ -68,6 +81,45 @@ public class NetUtils {
             return url;
         }
     }
+
+    public static URL genTrailerUrl(String movieId) {
+        Uri.Builder builder = new Uri.Builder();
+        URL url = null;
+        builder.scheme("http")
+                .authority(TMDB_MOVIE_BASE_URL)
+                .appendPath("3")
+                .appendPath("movie")
+                .appendPath(movieId)
+                .appendPath("videos")
+                .appendQueryParameter("api_key", API_KEY);
+        try {
+            url = new URL(builder.build().toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        return url;
+    }
+
+    public static URL genReviewUrl(String movieId) {
+        Uri.Builder builder = new Uri.Builder();
+        URL url = null;
+        builder.scheme("http")
+                .authority(TMDB_MOVIE_BASE_URL)
+                .appendPath("3")
+                .appendPath("movie")
+                .appendPath(movieId)
+                .appendPath("reviews")
+                .appendQueryParameter("api_key", API_KEY);
+        try {
+            url = new URL(builder.build().toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        return url;
+    }
+
+
+
     /**
      * open connection to tmdb using constructed url from genMovieUrl
      * read data (if avail) using scanner

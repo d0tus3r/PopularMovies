@@ -6,4 +6,7 @@
     <string name="release_date">Release Date</string>
     <string name="user_rating">User Rating</string>
     <string name="plot_summary">Plot Summary</string>
+    <string name="trailers">Trailers</string>
+    <string name="reviews">Reviews</string>
+    <string name="movie_trailer_thumbnail">Movie trailer thumbnail</string>
 </resources>

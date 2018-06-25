@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorBg"
+    android:textColor="@color/colorTitleText"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:id="@+id/review_author_tv"
+        android:layout_width="wrap_content"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:background="@color/colorBg"
+        android:textColor="@color/colorTitleText"
+        android:textStyle="bold"
+        android:paddingBottom="@dimen/basePadding"
+        android:paddingTop="16dp"
+        android:textSize="@dimen/movieBodySize"/>
+
+    <TextView
+        android:id="@+id/review_content_tv"
+        android:layout_width="wrap_content"
+        android:layout_weight="1"
+        android:background="@color/colorBg"
+        android:textColor="@color/colorBodyText"
+        android:layout_height="match_parent"
+        android:paddingBottom="16dp"
+        android:textSize="@dimen/movieBodySize"/>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:paddingTop="@dimen/basePadding"
+        android:paddingBottom="@dimen/basePadding"
+        android:background="@color/colorAppBar" />
+
+</LinearLayout>
+

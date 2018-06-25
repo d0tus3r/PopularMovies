@@ -2,8 +2,6 @@ package net.digitalswarm.popularmovies;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import net.digitalswarm.popularmovies.adapters.MoviePosterRVAdapter;
 import net.digitalswarm.popularmovies.models.Movie;
 import net.digitalswarm.popularmovies.utils.MovieJsonUtil;
 import net.digitalswarm.popularmovies.utils.NetUtils;
@@ -21,6 +20,8 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+
+import static net.digitalswarm.popularmovies.utils.NetUtils.internetAccess;
 
 public class MainActivity extends AppCompatActivity implements MoviePosterRVAdapter.MoviePosterRVAdapterClickListener {
 
@@ -45,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements MoviePosterRVAdap
         //generate url with sortPref popular by default : v2 maybe save state
         URL tmdb = NetUtils.genMovieUrl("popular");
         //populate screen with get movies async task
-        if (internetAccess()) {
+        if (internetAccess(this)) {
             new GetMovies().execute(tmdb);
         } else {
             Toast.makeText(this, "Please connect to internet and try again!", Toast.LENGTH_LONG).show();
@@ -62,22 +63,6 @@ public class MainActivity extends AppCompatActivity implements MoviePosterRVAdap
         detailActivityIntent.putExtra("Movie", moviePosterList.get(position));
         startActivity(detailActivityIntent);
     }
-
-    //helper method for testing for internet access
-    private boolean internetAccess() {
-        //init connectivity manager
-        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        //using the connectivity manager, poll active network info and save to networkInfo
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        //check if networkInfo is null && connection state
-        if (networkInfo != null && networkInfo.isConnected()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-
 
     private class GetMovies extends AsyncTask<URL, Void, String> {
         @Override
@@ -135,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements MoviePosterRVAdap
         if (item.getItemId() == R.id.sort_popular) {
             sortPref = "popular";
             URL tmdb = NetUtils.genMovieUrl(sortPref);
-            if(internetAccess()) {
+            if(internetAccess(this)) {
                 new GetMovies().execute(tmdb);
             } else {
                 Toast.makeText(this, "Please connect to internet and try again!", Toast.LENGTH_LONG).show();
@@ -145,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements MoviePosterRVAdap
         if (item.getItemId() == R.id.sort_top_rated) {
             sortPref = "top_rated";
             URL tmdb = NetUtils.genMovieUrl(sortPref);
-            if(internetAccess()) {
+            if(internetAccess(this)) {
                 new GetMovies().execute(tmdb);
             } else {
                 Toast.makeText(this, "Please connect to internet and try again!", Toast.LENGTH_LONG).show();
