@@ -129,11 +129,21 @@ public class DetailActivity extends AppCompatActivity implements MovieTrailerRVA
         TextView ratingTv = findViewById(R.id.user_rating_tv);
         TextView plotOverTv = findViewById(R.id.plot_synop_tv);
         favButton = findViewById(R.id.fav_button);
+        if (!currentMovie.getFavorite()) {
+            favButton.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),android.R.drawable.btn_star_big_off));
+        } else {
+            favButton.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),android.R.drawable.btn_star_big_on));
+
+        }
         favButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onFavButtonClicked();
-                favButton.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),android.R.drawable.btn_star_big_on));
+                if (!currentMovie.getFavorite()) {
+                    favButton.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),android.R.drawable.btn_star_big_on));
+                } else {
+                    favButton.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),android.R.drawable.btn_star_big_off));
+                }
             }
         });
 
@@ -164,21 +174,29 @@ public class DetailActivity extends AppCompatActivity implements MovieTrailerRVA
     //TODO: check to see if currentMovie is a favorite, if so deleteFavorite instead
     public void onFavButtonClicked() {
 
-        final FavoriteEntry favoriteEntry = new FavoriteEntry(
-                currentMovie.getOgName(),
-                currentMovie.getPosterUrl(),
-                currentMovie.getReleaseDate(),
-                currentMovie.getUserRating(),
-                currentMovie.getPlotSynopsis(),
-                currentMovie.getId());
+        if (!currentMovie.getFavorite()) {
+            final FavoriteEntry favoriteEntry = new FavoriteEntry(currentMovie);
 
-        AppExecutors.getInstance().diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                favDb.favoriteDao().insertFavorite(favoriteEntry);
-                finish();
-            }
-        });
+            AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                @Override
+                public void run() {
+                    favDb.favoriteDao().insertFavorite(favoriteEntry);
+                    finish();
+                }
+            });
+        } else {
+            final FavoriteEntry movieFromDb = favDb.favoriteDao().selectMovieById(currentMovie.getId());
+
+            AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                @Override
+                public void run() {
+                    favDb.favoriteDao().deleteFavorite(movieFromDb);
+                    finish();
+                }
+            });
+        }
+
+
     }
 
     private class GetReviews extends AsyncTask<URL, Void, String> {

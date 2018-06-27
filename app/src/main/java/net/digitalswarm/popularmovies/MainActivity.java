@@ -1,8 +1,11 @@
 package net.digitalswarm.popularmovies;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -14,6 +17,8 @@ import android.widget.Toast;
 
 import net.digitalswarm.popularmovies.adapters.MoviePosterRVAdapter;
 import net.digitalswarm.popularmovies.data.AppDatabase;
+import net.digitalswarm.popularmovies.data.FavoriteEntry;
+import net.digitalswarm.popularmovies.models.FavoritesViewModel;
 import net.digitalswarm.popularmovies.models.Movie;
 import net.digitalswarm.popularmovies.utils.MovieJsonUtil;
 import net.digitalswarm.popularmovies.utils.NetUtils;
@@ -30,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements MoviePosterRVAdap
     private MoviePosterRVAdapter mprvAdapter;
     private AppDatabase favDb;
     private String sortPref;
+    private ArrayList<FavoriteEntry> favMovies;
 
     /**
      * todo: finish implementing fav button state testing
@@ -87,6 +93,17 @@ public class MainActivity extends AppCompatActivity implements MoviePosterRVAdap
         detailActivityIntent.putExtra("Movie", moviePosterList.get(position));
         startActivity(detailActivityIntent);
     }
+
+    //private void setupViewModel() {
+    //    FavoritesViewModel viewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
+    //    viewModel.getFavMovies().observe(this, new Observer<ArrayList<FavoriteEntry>>() {
+    //        @Override
+    //        public void onChanged(@Nullable List<FavoriteEntry> favoriteEntries) {
+    //            favMovies = favoriteEntries;
+    //            mprvAdapter.setmFavMovies(favMovies);
+    //        }
+    //    });
+    //}
 
     private class GetMovies extends AsyncTask<URL, Void, String> {
         @Override
@@ -159,6 +176,11 @@ public class MainActivity extends AppCompatActivity implements MoviePosterRVAdap
                 Toast.makeText(this, "Please connect to internet and try again!", Toast.LENGTH_LONG).show();
             }
         }
+        //if (item.getItemId() == R.id.favorite_movies_list) {
+        //    sortPref = "favorites";
+        //    setupViewModel();
+
+//        }
         return super.onOptionsItemSelected(item);
     }
 }

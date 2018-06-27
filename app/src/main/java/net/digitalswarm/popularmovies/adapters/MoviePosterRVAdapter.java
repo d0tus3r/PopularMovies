@@ -12,6 +12,7 @@ import android.view.View.OnClickListener;
 import com.squareup.picasso.Picasso;
 
 import net.digitalswarm.popularmovies.R;
+import net.digitalswarm.popularmovies.data.FavoriteEntry;
 import net.digitalswarm.popularmovies.models.Movie;
 import java.util.ArrayList;
 import static android.content.ContentValues.TAG;
@@ -87,6 +88,22 @@ public class MoviePosterRVAdapter extends RecyclerView.Adapter<MoviePosterRVAdap
     //method used to assign movieList to Adapter
     public void setmMovieList(ArrayList<Movie> movieList){
         mMovieList = movieList;
+    }
+
+    public void setmFavMovies(ArrayList<FavoriteEntry> favMovies){
+        //if there is data, set mMovieList to fav movies
+        if (favMovies != null) {
+            for (int i = 0; i < favMovies.size(); i++) {
+                Movie favMovie = new Movie(favMovies.get(i).getMovieTitle(),
+                        favMovies.get(i).getMoviePoster(),
+                        favMovies.get(i).getMovieRelease(),
+                        favMovies.get(i).getMovieRating(),
+                        favMovies.get(i).getMovieOverview(),
+                        favMovies.get(i).getMovieId(),
+                        true);
+                mMovieList.add(favMovie);
+            }
+        }
     }
 
 
