@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 import net.digitalswarm.popularmovies.adapters.MovieReviewRVAdapter;
 import net.digitalswarm.popularmovies.adapters.MovieTrailerRVAdapter;
+import net.digitalswarm.popularmovies.data.AppDatabase;
 import net.digitalswarm.popularmovies.models.Movie;
 import net.digitalswarm.popularmovies.models.Review;
 import net.digitalswarm.popularmovies.models.Trailer;
@@ -46,6 +47,8 @@ public class DetailActivity extends AppCompatActivity implements MovieTrailerRVA
     private TextView trailerTitleTV;
     private RecyclerView trailerRV;
     private RecyclerView reviewRV;
+    private Movie currentMovie;
+    private AppDatabase favDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +56,10 @@ public class DetailActivity extends AppCompatActivity implements MovieTrailerRVA
         setContentView(R.layout.activity_detail);
         //pull intent from main activity
         Intent intentFromMain = getIntent();
-        Movie currentMovie = intentFromMain.getParcelableExtra("Movie");
+        currentMovie = intentFromMain.getParcelableExtra("Movie");
         String currentMovieId = currentMovie.getId();
+        //init db
+        favDb = AppDatabase.getInstance(getApplicationContext());
 
         //Trailer recycler view
         trailerRV = findViewById(R.id.trailer_recycler_view);

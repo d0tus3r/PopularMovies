@@ -54,7 +54,8 @@ public class MovieJsonUtil {
                     resultEntry.getString(MOVIE_RELEASE),
                     resultEntry.getString(MOVIE_RATING),
                     resultEntry.getString(MOVIE_OVERVIEW),
-                    resultEntry.getString(MOVIE_ID)));
+                    resultEntry.getString(MOVIE_ID),
+                    false));
         }
         return movieArrayList;
     }
