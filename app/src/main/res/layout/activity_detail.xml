@@ -34,27 +34,53 @@
             android:textStyle="bold"
             tools:text="Original Title" />
 
-        <TextView
-            android:id="@+id/release_date_title_tv"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorBg"
-            android:paddingLeft="@dimen/basePadding"
-            android:paddingTop="@dimen/basePadding"
-            android:text="@string/release_date"
-            android:textColor="@color/colorTitleText"
-            android:textSize="@dimen/movieHeaderSize"
-            android:textStyle="bold" />
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/release_date_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorBg"
-            android:paddingLeft="@dimen/basePadding"
-            android:textColor="@color/colorBodyText"
-            android:textSize="@dimen/movieBodySize"
-            tools:text="Release Date" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/release_date_title_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/colorBg"
+                    android:paddingLeft="@dimen/basePadding"
+                    android:paddingTop="@dimen/basePadding"
+                    android:text="@string/release_date"
+                    android:textColor="@color/colorTitleText"
+                    android:textSize="@dimen/movieHeaderSize"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/release_date_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/colorBg"
+                    android:paddingLeft="@dimen/basePadding"
+                    android:textColor="@color/colorBodyText"
+                    android:textSize="@dimen/movieBodySize"
+                    tools:text="Release Date" />
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/fav_button"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:background="@color/colorBg"
+                android:paddingRight="@dimen/basePadding"
+                android:paddingTop="@dimen/basePadding"
+                android:scaleType="fitEnd"
+                android:src="@android:drawable/star_big_off" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/user_rating_title_tv"

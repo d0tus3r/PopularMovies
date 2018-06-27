@@ -3,13 +3,17 @@ package net.digitalswarm.popularmovies;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,6 +21,7 @@ import com.squareup.picasso.Picasso;
 import net.digitalswarm.popularmovies.adapters.MovieReviewRVAdapter;
 import net.digitalswarm.popularmovies.adapters.MovieTrailerRVAdapter;
 import net.digitalswarm.popularmovies.data.AppDatabase;
+import net.digitalswarm.popularmovies.data.FavoriteEntry;
 import net.digitalswarm.popularmovies.models.Movie;
 import net.digitalswarm.popularmovies.models.Review;
 import net.digitalswarm.popularmovies.models.Trailer;
@@ -34,7 +39,7 @@ import java.util.Locale;
 
 import static net.digitalswarm.popularmovies.utils.NetUtils.internetAccess;
 
-public class DetailActivity extends AppCompatActivity implements MovieTrailerRVAdapter.MovieTrailerRVAdapterClickListener{
+public class DetailActivity extends AppCompatActivity implements MovieTrailerRVAdapter.MovieTrailerRVAdapterClickListener {
 
     private static final String TMDB_IMAGE_URL = "http://image.tmdb.org/t/p/w185/";
     private ArrayList<Review> reviewList;
@@ -49,6 +54,7 @@ public class DetailActivity extends AppCompatActivity implements MovieTrailerRVA
     private RecyclerView reviewRV;
     private Movie currentMovie;
     private AppDatabase favDb;
+    private ImageButton favButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,7 +120,7 @@ public class DetailActivity extends AppCompatActivity implements MovieTrailerRVA
     }
 
 
-
+    //TODO: Finish implementing onClick to determine if movie detail is a favorite already.
     //feed detail activity a movie and bind that data to views
     private void displayMovieDetails(Movie movie){
         ImageView moviePosterIv = findViewById(R.id.movie_poster_iv);
@@ -122,6 +128,14 @@ public class DetailActivity extends AppCompatActivity implements MovieTrailerRVA
         TextView releaseTv = findViewById(R.id.release_date_tv);
         TextView ratingTv = findViewById(R.id.user_rating_tv);
         TextView plotOverTv = findViewById(R.id.plot_synop_tv);
+        favButton = findViewById(R.id.fav_button);
+        favButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onFavButtonClicked();
+                favButton.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),android.R.drawable.btn_star_big_on));
+            }
+        });
 
         //clean format of date to be more human readable
         String releaseDate = movie.getReleaseDate();
@@ -143,6 +157,28 @@ public class DetailActivity extends AppCompatActivity implements MovieTrailerRVA
         releaseTv.setText(releaseDate);
         ratingTv.setText(movie.getUserRating());
         plotOverTv.setText(movie.getPlotSynopsis());
+
+
+    }
+
+    //TODO: check to see if currentMovie is a favorite, if so deleteFavorite instead
+    public void onFavButtonClicked() {
+
+        final FavoriteEntry favoriteEntry = new FavoriteEntry(
+                currentMovie.getOgName(),
+                currentMovie.getPosterUrl(),
+                currentMovie.getReleaseDate(),
+                currentMovie.getUserRating(),
+                currentMovie.getPlotSynopsis(),
+                currentMovie.getId());
+
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                favDb.favoriteDao().insertFavorite(favoriteEntry);
+                finish();
+            }
+        });
     }
 
     private class GetReviews extends AsyncTask<URL, Void, String> {

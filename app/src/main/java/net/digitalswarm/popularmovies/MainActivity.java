@@ -31,6 +31,15 @@ public class MainActivity extends AppCompatActivity implements MoviePosterRVAdap
     private AppDatabase favDb;
     private String sortPref;
 
+    /**
+     * todo: finish implementing fav button state testing
+     * todo: finish implementing fav view
+     * todo: finish implementing saved instance states to handle rotation
+     * todo: set layout prefs for landscape view
+     * todo: finish implementing sql db
+     *
+     */
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
