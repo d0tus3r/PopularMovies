@@ -26,6 +26,7 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 import static net.digitalswarm.popularmovies.utils.NetUtils.internetAccess;
 
@@ -33,16 +34,15 @@ public class MainActivity extends AppCompatActivity implements MoviePosterRVAdap
 
     private ArrayList<Movie> moviePosterList;
     private MoviePosterRVAdapter mprvAdapter;
-    private AppDatabase favDb;
+    public static AppDatabase favDb;
     private String sortPref;
     private ArrayList<FavoriteEntry> favMovies;
+    private FavoritesViewModel favoritesViewModel;
 
     /**
      * todo: finish implementing fav button state testing
      * todo: finish implementing fav view
      * todo: finish implementing saved instance states to handle rotation
-     * todo: set layout prefs for landscape view
-     * todo: finish implementing sql db
      *
      */
 
@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements MoviePosterRVAdap
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //grab db and assign to favDb
+        favoritesViewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
         favDb = AppDatabase.getInstance(getApplicationContext());
         //set gridlayout to have 2 columns
         GridLayoutManager gridLayout = new GridLayoutManager(this, 2);
@@ -94,16 +95,20 @@ public class MainActivity extends AppCompatActivity implements MoviePosterRVAdap
         startActivity(detailActivityIntent);
     }
 
-    //private void setupViewModel() {
-    //    FavoritesViewModel viewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
-    //    viewModel.getFavMovies().observe(this, new Observer<ArrayList<FavoriteEntry>>() {
-    //        @Override
-    //        public void onChanged(@Nullable List<FavoriteEntry> favoriteEntries) {
-    //            favMovies = favoriteEntries;
-    //            mprvAdapter.setmFavMovies(favMovies);
-    //        }
-    //    });
-    //}
+    private void setupViewModel() {
+        favoritesViewModel.getFavMovies().observe(this, new Observer<List<FavoriteEntry>>() {
+            @Override
+            public void onChanged(@Nullable List<FavoriteEntry> favoriteEntries) {
+                if (favoriteEntries != null) {
+                    for (int i = 0; i < favoriteEntries.size(); i++) {
+                        favMovies.add(favoriteEntries.get(i));
+                    }
+                    mprvAdapter.setmFavMovies(favMovies);
+                }
+
+            }
+        });
+    }
 
     private class GetMovies extends AsyncTask<URL, Void, String> {
         @Override
@@ -176,11 +181,10 @@ public class MainActivity extends AppCompatActivity implements MoviePosterRVAdap
                 Toast.makeText(this, "Please connect to internet and try again!", Toast.LENGTH_LONG).show();
             }
         }
-        //if (item.getItemId() == R.id.favorite_movies_list) {
-        //    sortPref = "favorites";
-        //    setupViewModel();
-
-//        }
+        if (item.getItemId() == R.id.favorite_movies_list) {
+            sortPref = "favorites";
+            setupViewModel();
+        }
         return super.onOptionsItemSelected(item);
     }
 }

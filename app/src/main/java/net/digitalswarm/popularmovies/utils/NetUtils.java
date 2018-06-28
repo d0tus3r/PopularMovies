@@ -27,7 +27,7 @@ public class NetUtils {
 
     //api key builder
     //Todo: Obfuscate key by hiding in config file not indexed by git [stretch goal]
-    private static final String API_KEY = "e47123810aa37b4363daffe05313ca4d";
+    private static final String API_KEY = "";
 
     //helper method for testing for internet access
     public static boolean internetAccess(Context context) {

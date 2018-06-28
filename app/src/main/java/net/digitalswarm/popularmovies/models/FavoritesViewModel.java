@@ -6,11 +6,8 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 import android.util.Log;
-
 import net.digitalswarm.popularmovies.data.AppDatabase;
 import net.digitalswarm.popularmovies.data.FavoriteEntry;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class FavoritesViewModel extends AndroidViewModel {

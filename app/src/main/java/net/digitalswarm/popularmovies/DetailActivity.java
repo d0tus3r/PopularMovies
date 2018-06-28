@@ -5,12 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -53,8 +55,8 @@ public class DetailActivity extends AppCompatActivity implements MovieTrailerRVA
     private RecyclerView trailerRV;
     private RecyclerView reviewRV;
     private Movie currentMovie;
-    private AppDatabase favDb;
     private ImageButton favButton;
+    private FavoriteEntry favMovie;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,8 +66,7 @@ public class DetailActivity extends AppCompatActivity implements MovieTrailerRVA
         Intent intentFromMain = getIntent();
         currentMovie = intentFromMain.getParcelableExtra("Movie");
         String currentMovieId = currentMovie.getId();
-        //init db
-        favDb = AppDatabase.getInstance(getApplicationContext());
+        favMovie = MainActivity.favDb.favoriteDao().selectMovieById(currentMovieId);
 
         //Trailer recycler view
         trailerRV = findViewById(R.id.trailer_recycler_view);
@@ -119,8 +120,6 @@ public class DetailActivity extends AppCompatActivity implements MovieTrailerRVA
         }
     }
 
-
-    //TODO: Finish implementing onClick to determine if movie detail is a favorite already.
     //feed detail activity a movie and bind that data to views
     private void displayMovieDetails(Movie movie){
         ImageView moviePosterIv = findViewById(R.id.movie_poster_iv);
@@ -129,21 +128,22 @@ public class DetailActivity extends AppCompatActivity implements MovieTrailerRVA
         TextView ratingTv = findViewById(R.id.user_rating_tv);
         TextView plotOverTv = findViewById(R.id.plot_synop_tv);
         favButton = findViewById(R.id.fav_button);
-        if (!currentMovie.getFavorite()) {
-            favButton.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),android.R.drawable.btn_star_big_off));
-        } else {
+        if (favMovie != null) {
             favButton.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),android.R.drawable.btn_star_big_on));
+        } else {
+            favButton.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),android.R.drawable.btn_star_big_off));
 
         }
         favButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onFavButtonClicked();
-                if (!currentMovie.getFavorite()) {
-                    favButton.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),android.R.drawable.btn_star_big_on));
-                } else {
+                if (favMovie != null) {
                     favButton.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),android.R.drawable.btn_star_big_off));
+                } else {
+                    favButton.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),android.R.drawable.btn_star_big_on));
                 }
+                finish();
             }
         });
 
@@ -170,33 +170,33 @@ public class DetailActivity extends AppCompatActivity implements MovieTrailerRVA
 
 
     }
-
-    //TODO: check to see if currentMovie is a favorite, if so deleteFavorite instead
     public void onFavButtonClicked() {
 
-        if (!currentMovie.getFavorite()) {
-            final FavoriteEntry favoriteEntry = new FavoriteEntry(currentMovie);
-
-            AppExecutors.getInstance().diskIO().execute(new Runnable() {
-                @Override
-                public void run() {
-                    favDb.favoriteDao().insertFavorite(favoriteEntry);
-                    finish();
-                }
-            });
+        if (favMovie == null) {
+            addFavorite();
         } else {
-            final FavoriteEntry movieFromDb = favDb.favoriteDao().selectMovieById(currentMovie.getId());
-
-            AppExecutors.getInstance().diskIO().execute(new Runnable() {
-                @Override
-                public void run() {
-                    favDb.favoriteDao().deleteFavorite(movieFromDb);
-                    finish();
-                }
-            });
+            delFavorite();
         }
 
 
+    }
+
+    private void addFavorite() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                MainActivity.favDb.favoriteDao().insertFavorite(favMovie);
+            }
+        }).start();
+    }
+
+    private void delFavorite() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                MainActivity.favDb.favoriteDao().deleteFavorite(favMovie);
+            }
+        }).start();
     }
 
     private class GetReviews extends AsyncTask<URL, Void, String> {

@@ -4,6 +4,8 @@ package net.digitalswarm.popularmovies.utils;
  * parse tmdb movie JSON and build list of movie objects for movie poster recycler view
  */
 import android.util.Log;
+
+import net.digitalswarm.popularmovies.data.AppDatabase;
 import net.digitalswarm.popularmovies.models.Movie;
 import net.digitalswarm.popularmovies.models.Review;
 import net.digitalswarm.popularmovies.models.Trailer;
@@ -38,6 +40,7 @@ public class MovieJsonUtil {
 
     //Net Utils will give a String of json data - use this data to create a json array to convert to movie objects
     public static ArrayList getMovieResults(String tmdbJsonResponse) throws JSONException {
+
         //assign tmdb response to jsonobject
         JSONObject tmdbJson = new JSONObject(tmdbJsonResponse);
         //strip results array | results is an array with each
@@ -54,8 +57,7 @@ public class MovieJsonUtil {
                     resultEntry.getString(MOVIE_RELEASE),
                     resultEntry.getString(MOVIE_RATING),
                     resultEntry.getString(MOVIE_OVERVIEW),
-                    resultEntry.getString(MOVIE_ID),
-                    false));
+                    resultEntry.getString(MOVIE_ID)));
         }
         return movieArrayList;
     }

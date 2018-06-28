@@ -16,18 +16,15 @@ public class Movie implements Parcelable{
     private final String userRating;
     private final String plotSynopsis;
     private final String id;
-    //Favorite
-    private Boolean isFavorite;
 
     //default constructor
-    public Movie(String ogName, String posterUrl, String releaseDate, String userRating, String plotSynopsis, String id, Boolean isFavorite) {
+    public Movie(String ogName, String posterUrl, String releaseDate, String userRating, String plotSynopsis, String id) {
         this.ogName = ogName;
         this.posterUrl = posterUrl;
         this.releaseDate = releaseDate;
         this.userRating = userRating;
         this.plotSynopsis = plotSynopsis;
         this.id = id;
-        this.isFavorite = isFavorite;
     }
     //parcel version constructor
     private Movie(Parcel parcel){
@@ -37,8 +34,6 @@ public class Movie implements Parcelable{
         this.userRating = parcel.readString();
         this.plotSynopsis = parcel.readString();
         this.id = parcel.readString();
-        //true if != 0
-        this.isFavorite = parcel.readByte() != 0;
     }
     //movie object creator from parcel
     public static final Creator<Movie> CREATOR = new Creator<Movie>() {
@@ -78,13 +73,6 @@ public class Movie implements Parcelable{
         return id;
     }
 
-    public Boolean getFavorite() {
-        return isFavorite;
-    }
-
-    public void setFavorite(Boolean favorite) {
-        isFavorite = favorite;
-    }
 
 
 
@@ -102,8 +90,6 @@ public class Movie implements Parcelable{
         parcel.writeString(this.getUserRating());
         parcel.writeString(this.getPlotSynopsis());
         parcel.writeString(this.getId());
-        //1 true, 0 false
-        parcel.writeByte((byte) (isFavorite ? 1 : 0));
     }
 
 

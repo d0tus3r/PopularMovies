@@ -99,8 +99,7 @@ public class MoviePosterRVAdapter extends RecyclerView.Adapter<MoviePosterRVAdap
                         favMovies.get(i).getMovieRelease(),
                         favMovies.get(i).getMovieRating(),
                         favMovies.get(i).getMovieOverview(),
-                        favMovies.get(i).getMovieId(),
-                        true);
+                        favMovies.get(i).getMovieId());
                 mMovieList.add(favMovie);
             }
         }
