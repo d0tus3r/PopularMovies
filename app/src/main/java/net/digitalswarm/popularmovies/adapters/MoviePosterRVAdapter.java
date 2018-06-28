@@ -13,7 +13,10 @@ import com.squareup.picasso.Picasso;
 
 import net.digitalswarm.popularmovies.R;
 import net.digitalswarm.popularmovies.data.FavoriteMovie;
+import net.digitalswarm.popularmovies.models.FavoritesViewModel;
 import net.digitalswarm.popularmovies.models.Movie;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import static android.content.ContentValues.TAG;
 
@@ -25,6 +28,7 @@ public class MoviePosterRVAdapter extends RecyclerView.Adapter<MoviePosterRVAdap
 
     //List of Movie Objects to Fill Recycler View
     private ArrayList<Movie> mMovieList;
+    private ArrayList<Movie> mFavMovieList;
     private final Context mContext;
     private final MoviePosterRVAdapterClickListener mClickListener;
 
@@ -90,19 +94,26 @@ public class MoviePosterRVAdapter extends RecyclerView.Adapter<MoviePosterRVAdap
         mMovieList = movieList;
     }
 
-    public void setmFavMovies(ArrayList<FavoriteMovie> favMovies){
+    public void setmFavMovies(FavoriteMovie favMovies[]){
         //if there is data, set mMovieList to fav movies
+        mFavMovieList = new ArrayList<>();
         if (favMovies != null) {
-            for (int i = 0; i < favMovies.size(); i++) {
-                Movie favMovie = new Movie(favMovies.get(i).getMovieTitle(),
-                        favMovies.get(i).getMoviePoster(),
-                        favMovies.get(i).getMovieRelease(),
-                        favMovies.get(i).getMovieRating(),
-                        favMovies.get(i).getMovieOverview(),
-                        favMovies.get(i).getMovieId());
-                mMovieList.add(favMovie);
+            for (FavoriteMovie favoriteMovie : favMovies) {
+                Movie newMovie = new Movie (favoriteMovie.getMovieTitle(),
+                        favoriteMovie.getMoviePoster(),
+                        favoriteMovie.getMovieRelease(),
+                        favoriteMovie.getMovieRating(),
+                        favoriteMovie.getMovieOverview(),
+                        favoriteMovie.getMovieId());
+                mFavMovieList.add(newMovie);
+                Log.d(TAG, "new movie added: " + newMovie.getOgName());
+                setmMovieList(mFavMovieList);
             }
         }
+    }
+
+    public ArrayList<Movie> getmFavMovieList() {
+        return mFavMovieList;
     }
 
 

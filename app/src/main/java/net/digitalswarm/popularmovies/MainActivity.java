@@ -6,6 +6,7 @@ import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -35,8 +36,14 @@ public class MainActivity extends AppCompatActivity implements MoviePosterRVAdap
 
     private ArrayList<Movie> moviePosterList;
     private MoviePosterRVAdapter mprvAdapter;
+    private GridLayoutManager gridLayout;
     public static AppDatabase favDb;
+    //keys for saved instance state bundle
+    private static final String SORT_PREF_KEY = "sortPref";
+    private static final String GRID_STATE = "gridState";
+    //values for saved instance state
     private String sortPref;
+    private Parcelable gridState;
     private ArrayList<FavoriteMovie> favMovies;
     private FavoritesViewModel favoritesViewModel;
 
@@ -55,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements MoviePosterRVAdap
         favoritesViewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
         favDb = AppDatabase.getInstance(getApplicationContext());
         //set gridlayout to have 2 columns
-        GridLayoutManager gridLayout = new GridLayoutManager(this, 2);
+        gridLayout = new GridLayoutManager(this, 2);
         //init movie poster recycler view to recycler view in activity_main
         RecyclerView mpRV = findViewById(R.id.recycler_view);
         moviePosterList = new ArrayList<>();
@@ -65,24 +72,65 @@ public class MainActivity extends AppCompatActivity implements MoviePosterRVAdap
         //create new recycler view and set adapter to movieposterrecyclerview
         mprvAdapter = new MoviePosterRVAdapter(this, moviePosterList, this);
         mpRV.setAdapter(mprvAdapter);
-        //generate url with sortPref popular by default
-        sortPref = "popular";
-        URL tmdb = NetUtils.genMovieUrl(sortPref);
-        //populate screen with get movies async task
-        if (internetAccess(this)) {
-            new GetMovies().execute(tmdb);
+        //generate url with sortPref popular by default, check instancestate
+        if (savedInstanceState == null) {
+            sortByPopular();
         } else {
-            Toast.makeText(this, "Please connect to internet and try again!", Toast.LENGTH_LONG).show();
+            sortPref = savedInstanceState.getString(SORT_PREF_KEY);
+
+            switch (sortPref) {
+                case "favorites":
+                    setupViewModel();
+                    break;
+
+                case "popular":
+                    sortByPopular();
+                    break;
+
+                case "top_rated":
+                    sortByTopRated();
+                    break;
+            }
+
+
         }
+
+
+
     }
 
     //implement saving of states
     @Override
     protected void onSaveInstanceState(Bundle outState) {
+        outState.putString(SORT_PREF_KEY, sortPref);
+        gridState = gridLayout.onSaveInstanceState();
+        outState.putParcelable(GRID_STATE, gridState);
         super.onSaveInstanceState(outState);
-        String sort_pref = sortPref;
-        outState.putString(sort_pref, sortPref);
+    }
 
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        sortPref = savedInstanceState.getString(SORT_PREF_KEY);
+        gridState = savedInstanceState.getParcelable(GRID_STATE);
+        super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    @Override
+    protected void onStart() {
+        //setup view model if sorting by favorites
+        if (sortPref == "favorites") {
+            setupViewModel();
+        }
+        super.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+        //resume grid state if saved state available
+        if (gridState != null) {
+            gridLayout.onRestoreInstanceState(gridState);
+        }
+        super.onResume();
     }
 
     @Override
@@ -92,6 +140,9 @@ public class MainActivity extends AppCompatActivity implements MoviePosterRVAdap
         Class destinationClass = DetailActivity.class;
         //create a new intent to launch detail activity, using current moviePosterList position
         Intent detailActivityIntent = new Intent(context, destinationClass);
+        if (sortPref == "favorites") {
+            moviePosterList = mprvAdapter.getmFavMovieList();
+        }
         detailActivityIntent.putExtra("Movie", moviePosterList.get(position));
         startActivity(detailActivityIntent);
     }
@@ -101,10 +152,8 @@ public class MainActivity extends AppCompatActivity implements MoviePosterRVAdap
             @Override
             public void onChanged(@Nullable FavoriteMovie[] favoriteMovies) {
                 if (favoriteMovies != null) {
-                    for (FavoriteMovie favoriteMovie : favoriteMovies) {
-                        favMovies.add(favoriteMovie);
-                    }
-                    mprvAdapter.setmFavMovies(favMovies);
+                    mprvAdapter.setmFavMovies(favoriteMovies);
+                    mprvAdapter.notifyDataSetChanged();
                 }
 
             }
@@ -154,28 +203,36 @@ public class MainActivity extends AppCompatActivity implements MoviePosterRVAdap
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.sort_popular) {
-            sortPref = "popular";
-            URL tmdb = NetUtils.genMovieUrl(sortPref);
-            if(internetAccess(this)) {
-                new GetMovies().execute(tmdb);
-            } else {
-                Toast.makeText(this, "Please connect to internet and try again!", Toast.LENGTH_LONG).show();
-            }
+            sortByPopular();
             return true;
         }
         if (item.getItemId() == R.id.sort_top_rated) {
-            sortPref = "top_rated";
-            URL tmdb = NetUtils.genMovieUrl(sortPref);
-            if(internetAccess(this)) {
-                new GetMovies().execute(tmdb);
-            } else {
-                Toast.makeText(this, "Please connect to internet and try again!", Toast.LENGTH_LONG).show();
-            }
+            sortByTopRated();
         }
         if (item.getItemId() == R.id.favorite_movies_list) {
             sortPref = "favorites";
             setupViewModel();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void sortByPopular() {
+        sortPref = "popular";
+        URL tmdb = NetUtils.genMovieUrl(sortPref);
+        if(internetAccess(this)) {
+            new GetMovies().execute(tmdb);
+        } else {
+            Toast.makeText(this, "Please connect to internet and try again!", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void sortByTopRated() {
+        sortPref = "top_rated";
+        URL tmdb = NetUtils.genMovieUrl(sortPref);
+        if(internetAccess(this)) {
+            new GetMovies().execute(tmdb);
+        } else {
+            Toast.makeText(this, "Please connect to internet and try again!", Toast.LENGTH_LONG).show();
+        }
     }
 }
