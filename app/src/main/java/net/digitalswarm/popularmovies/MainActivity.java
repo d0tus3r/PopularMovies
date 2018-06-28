@@ -2,6 +2,7 @@ package net.digitalswarm.popularmovies;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -17,7 +18,7 @@ import android.widget.Toast;
 
 import net.digitalswarm.popularmovies.adapters.MoviePosterRVAdapter;
 import net.digitalswarm.popularmovies.data.AppDatabase;
-import net.digitalswarm.popularmovies.data.FavoriteEntry;
+import net.digitalswarm.popularmovies.data.FavoriteMovie;
 import net.digitalswarm.popularmovies.models.FavoritesViewModel;
 import net.digitalswarm.popularmovies.models.Movie;
 import net.digitalswarm.popularmovies.utils.MovieJsonUtil;
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements MoviePosterRVAdap
     private MoviePosterRVAdapter mprvAdapter;
     public static AppDatabase favDb;
     private String sortPref;
-    private ArrayList<FavoriteEntry> favMovies;
+    private ArrayList<FavoriteMovie> favMovies;
     private FavoritesViewModel favoritesViewModel;
 
     /**
@@ -96,12 +97,12 @@ public class MainActivity extends AppCompatActivity implements MoviePosterRVAdap
     }
 
     private void setupViewModel() {
-        favoritesViewModel.getFavMovies().observe(this, new Observer<List<FavoriteEntry>>() {
+        favoritesViewModel.getFavMovies().observe(this, new Observer<FavoriteMovie[]>() {
             @Override
-            public void onChanged(@Nullable List<FavoriteEntry> favoriteEntries) {
-                if (favoriteEntries != null) {
-                    for (int i = 0; i < favoriteEntries.size(); i++) {
-                        favMovies.add(favoriteEntries.get(i));
+            public void onChanged(@Nullable FavoriteMovie[] favoriteMovies) {
+                if (favoriteMovies != null) {
+                    for (FavoriteMovie favoriteMovie : favoriteMovies) {
+                        favMovies.add(favoriteMovie);
                     }
                     mprvAdapter.setmFavMovies(favMovies);
                 }
@@ -115,11 +116,8 @@ public class MainActivity extends AppCompatActivity implements MoviePosterRVAdap
         protected void onPreExecute() {
             super.onPreExecute();
         }
-        /**
-         * feed url for netutil request, return json for post execute
-         * @param url
-         * @return
-         */
+
+        //fetch movie data
         @Override
         protected String doInBackground(URL... url) {
             String movieResults = null;
@@ -144,13 +142,6 @@ public class MainActivity extends AppCompatActivity implements MoviePosterRVAdap
         }
     }
 
-    /**
-     * sort menu -- Popular / Top Rated as choices
-     * when selecting a new sort parameter update movie poster list with
-     * new movies
-     * @param menu
-     * @return
-     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         //create menu inflater

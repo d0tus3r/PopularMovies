@@ -9,25 +9,24 @@ import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Dao
 public interface FavoriteDao {
 
-    @Query("SELECT * FROM favMovies ORDER BY movieTitle")
-    LiveData<List<FavoriteEntry>> loadAllFavorites();
+    @Query("SELECT * FROM favorites")
+    LiveData<FavoriteMovie[]> loadAllFavorites();
 
-    @Insert
-    void insertFavorite(FavoriteEntry favoriteEntry);
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertFavorite(FavoriteMovie favoriteMovie);
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    void updateFavorite(FavoriteEntry favoriteEntry);
+    void updateFavorite(FavoriteMovie favoriteMovie);
 
     @Delete
-    void deleteFavorite(FavoriteEntry favoriteEntry);
+    void deleteFavorite(FavoriteMovie favoriteMovie);
 
     //on fav button selected, query to see if movie id matches
-    @Query("SELECT * FROM favMovies WHERE movieId = :movieId")
-    FavoriteEntry selectMovieById(String movieId);
+    @Query("SELECT * FROM favorites WHERE movieId = :movieId")
+    FavoriteMovie selectMovieById(String movieId);
 }

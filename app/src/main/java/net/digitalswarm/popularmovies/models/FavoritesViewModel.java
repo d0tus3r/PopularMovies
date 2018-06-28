@@ -7,23 +7,24 @@ import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import net.digitalswarm.popularmovies.data.AppDatabase;
-import net.digitalswarm.popularmovies.data.FavoriteEntry;
+import net.digitalswarm.popularmovies.data.FavoriteMovie;
 import java.util.List;
 
 public class FavoritesViewModel extends AndroidViewModel {
 
     private static final String TAG = FavoritesViewModel.class.getSimpleName();
 
-    private LiveData<List<FavoriteEntry>> favMovies;
+    private LiveData<FavoriteMovie[]> favMovies;
+    private AppDatabase favDb;
 
     public FavoritesViewModel(@NonNull Application application) {
         super(application);
-        AppDatabase database = AppDatabase.getInstance(this.getApplication());
+        favDb = AppDatabase.getInstance(this.getApplication());
         Log.d(TAG, "Actively retrieving favorites from db");
-        favMovies = database.favoriteDao().loadAllFavorites();
+        favMovies = favDb.favoriteDao().loadAllFavorites();
     }
 
-    public LiveData<List<FavoriteEntry>> getFavMovies() {
+    public LiveData<FavoriteMovie[]> getFavMovies() {
         return favMovies;
     }
 

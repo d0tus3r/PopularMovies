@@ -3,18 +3,14 @@ package net.digitalswarm.popularmovies;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,8 +18,7 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 import net.digitalswarm.popularmovies.adapters.MovieReviewRVAdapter;
 import net.digitalswarm.popularmovies.adapters.MovieTrailerRVAdapter;
-import net.digitalswarm.popularmovies.data.AppDatabase;
-import net.digitalswarm.popularmovies.data.FavoriteEntry;
+import net.digitalswarm.popularmovies.data.FavoriteMovie;
 import net.digitalswarm.popularmovies.models.Movie;
 import net.digitalswarm.popularmovies.models.Review;
 import net.digitalswarm.popularmovies.models.Trailer;
@@ -56,7 +51,7 @@ public class DetailActivity extends AppCompatActivity implements MovieTrailerRVA
     private RecyclerView reviewRV;
     private Movie currentMovie;
     private ImageButton favButton;
-    private FavoriteEntry favMovie;
+    private FavoriteMovie favMovie;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -185,6 +180,7 @@ public class DetailActivity extends AppCompatActivity implements MovieTrailerRVA
         new Thread(new Runnable() {
             @Override
             public void run() {
+                favMovie = new FavoriteMovie(currentMovie);
                 MainActivity.favDb.favoriteDao().insertFavorite(favMovie);
             }
         }).start();
